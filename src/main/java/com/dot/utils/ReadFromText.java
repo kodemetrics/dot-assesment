@@ -5,6 +5,7 @@ import com.dot.repo.UserAccessLogRepository;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class ReadFromText extends  Thread{
         BufferedReader br = null;
         String line;
         try{
-            br = new BufferedReader(new java.io.FileReader(filename));
+            br = new BufferedReader(new FileReader(filename));
 
             while ((line = br.readLine()) != null){
                 String[] data = line.split("\\|");
