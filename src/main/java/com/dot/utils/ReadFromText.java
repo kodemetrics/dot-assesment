@@ -13,6 +13,8 @@ import java.util.List;
 
 public class ReadFromText extends  Thread{
     private String[] args;
+
+    private UserAccessLogReader reader;
     private UserAccessLogRepository userAccessLogRepository;
     private int limit;
     private String start,duration,accessFile;
@@ -54,12 +56,26 @@ public class ReadFromText extends  Thread{
         File file = new File(accessFile);
         if (file.exists()) {
             System.out.println("File exists");
-            readTextFromFile(accessFile); // read text file and insert records to database
+            //readTextFromFile(accessFile); // read text file and insert records to database
+            processFile(accessFile); // read text file and insert records to database
         } else {
             System.out.println("File does not exist");
         }
     }
 
+
+    public void processFile(String filename) {
+        List<UserAccessLog> userAccessLogs = reader.readUserAccessLogs(filename);
+        if (!userAccessLogs.isEmpty()) {
+            System.out.println("Inserting records...");
+            userAccessLogRepository.saveAll(userAccessLogs);
+            System.out.println("Insert operation is complete");
+        } else {
+            System.out.println("No records to insert");
+        }
+    }
+
+    /*
     public  void readTextFromFile(String filename){
         StringBuilder sb = new StringBuilder();
         final List<UserAccessLog> userAccessLogList = new ArrayList<>();
@@ -87,4 +103,5 @@ public class ReadFromText extends  Thread{
             System.out.println("Error Reading & Inserting to Database: "+ex.getMessage());
         }
     }
+    */
 }
